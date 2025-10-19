@@ -1,0 +1,29 @@
+{
+  "name": "Backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/Backend/src/main/java",
+  "targets": {
+    "build": {
+      "executor": "@nx/gradle:gradle",
+      "options": {
+        "projectDir": "apps/Backend",
+        "task": "build"
+      }
+    },
+    "test": {
+      "executor": "@nx/gradle:gradle",
+      "options": {
+        "projectDir": "apps/Backend",
+        "task": "test"
+      }
+    },
+    "clean": {
+      "executor": "@nx/gradle:gradle",
+      "options": {
+        "projectDir": "apps/Backend",
+        "task": "clean"
+      }
+    }
+  }
+}
