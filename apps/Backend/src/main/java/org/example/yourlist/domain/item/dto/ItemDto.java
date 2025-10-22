@@ -3,7 +3,7 @@ package org.example.yourlist.domain.item.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public final class ItemDto {
     private ItemDto() {}
@@ -49,7 +49,7 @@ public final class ItemDto {
             String name,
             String description,
             boolean isBought,
-            Instant createdAt
+            LocalDateTime createdAt
     ) {}
 
     /**

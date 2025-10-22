@@ -86,7 +86,4 @@ Celem tego punktu końcowego jest umożliwienie uwierzytelnionym użytkownikom t
     -   Zaimplementować lub zaktualizować mapper (np. MapStruct lub ręczny), aby obsługiwał konwersję z encji `List` do `ListResponse`.
 5.  **Testy**:
     -   Napisać testy jednostkowe dla `ListService`, weryfikujące logikę biznesową.
-    -   Napisać testy integracyjne dla `ListController`, które sprawdzają:
-        -   Pomyślne utworzenie listy (status 201).
-        -   Odrzucenie żądania z nieprawidłowymi danymi (status 400).
-        -   Odrzucenie żądania bez tokenu uwierzytelniającego (status 401).
+   

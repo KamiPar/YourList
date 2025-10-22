@@ -10,7 +10,7 @@ import org.example.yourlist.domain.item.entity.Item;
 import org.example.yourlist.domain.listshare.entity.ShoppingListShare;
 import org.example.yourlist.domain.user.entity.User;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -32,17 +32,17 @@ public class ShoppingList {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String name;
 
     @Column(name = "share_token", nullable = false, unique = true)
     private UUID shareToken;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    private OffsetDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "shoppingList", fetch = FetchType.LAZY)
     private Set<Item> items = new HashSet<>();

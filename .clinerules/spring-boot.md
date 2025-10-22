@@ -10,6 +10,7 @@
 - For complex logic, use Spring profiles and configuration parameters to control which beans are injected instead of hardcoded conditionals
 - If a well-known library simplifies the solution, suggest using it instead of generating a custom implementation
 - Use DTOs as immutable `record` types
+- Use Builder instead of setter when possible
 - Use Bean Validation annotations (e.g., `@Size`, `@Email`, etc.) instead of manual validation logic
 - Use `@Valid` on request parameters annotated with `@RequestBody`
 - Use custom exceptions for business-related scenarios
@@ -18,4 +19,5 @@
 - Use SLF4J for logging instead of `System.out.println`
 - Prefer using lambdas and streams over imperative loops and conditionals where appropriate
 - Use `Optional` to avoid `NullPointerException`
+- When implementing REST controllers in Spring Boot, use the @ResponseStatus annotation with the appropriate HTTP status code instead of returning a ResponseEntity object if the method only needs to return a response body and a fixed status.
 

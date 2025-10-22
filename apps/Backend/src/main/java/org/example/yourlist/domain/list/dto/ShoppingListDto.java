@@ -6,6 +6,7 @@ import org.example.yourlist.domain.item.dto.ItemDto;
 import org.example.yourlist.domain.user.dto.UserDto;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,8 +75,8 @@ public final class ShoppingListDto {
             Long ownerId,
             boolean isOwner,
             UUID shareToken,
-            Instant createdAt,
-            Instant updatedAt
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
     ) {}
 
     /**

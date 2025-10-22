@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.yourlist.domain.list.entity.ShoppingList;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "items")
@@ -24,7 +25,7 @@ public class Item {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "list_id", nullable = false)
+    @JoinColumn(name = "shopping_list_id", nullable = false)
     private ShoppingList shoppingList;
 
     @Column(nullable = false)
@@ -37,6 +38,6 @@ public class Item {
     private Boolean isBought = false;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
 }

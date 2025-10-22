@@ -26,7 +26,7 @@ public class ShoppingListShare {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("listId")
-    @JoinColumn(name = "list_id", nullable = false)
+    @JoinColumn(name = "shopping_list_id", nullable = false)
     private ShoppingList shoppingList;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,7 +45,7 @@ public class ShoppingListShare {
     @ToString
     public static class ShoppingListShareId implements Serializable {
 
-      @Column(name = "list_id")
+      @Column(name = "shopping_list_id")
       private Long listId;
 
       @Column(name = "user_id")
