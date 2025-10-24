@@ -33,6 +33,12 @@ public class GlobalExceptionHandler {
         return errorDetail;
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ProblemDetail handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), ex.getMessage());
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ProblemDetail handleResourceNotFoundException(ResourceNotFoundException ex) {

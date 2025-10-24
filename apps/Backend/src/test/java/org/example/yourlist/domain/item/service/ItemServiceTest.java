@@ -102,4 +102,90 @@ class ItemServiceTest {
 
         verify(itemRepository, never()).save(any(Item.class));
     }
+
+    @Test
+    void updateItem_shouldUpdateItem_whenUserIsOwner() {
+        ItemDto.UpdateItemRequest updateRequest = new ItemDto.UpdateItemRequest("New Milk", "3L", true);
+        when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
+        when(itemRepository.findByIdAndShoppingListId(1L, 1L)).thenReturn(Optional.of(item));
+        when(itemRepository.save(any(Item.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(itemMapper.toResponse(any(Item.class))).thenAnswer(invocation -> {
+            Item savedItem = invocation.getArgument(0);
+            return new ItemDto.ItemResponse(savedItem.getId(), savedItem.getShoppingList().getId(), savedItem.getName(), savedItem.getDescription(), savedItem.getIsBought(), savedItem.getCreatedAt());
+        });
+
+        ItemDto.ItemResponse result = itemService.updateItem(1L, 1L, updateRequest, listOwner);
+
+        assertNotNull(result);
+        assertEquals("New Milk", result.name());
+        assertEquals("3L", result.description());
+        assertTrue(result.isBought());
+        verify(itemRepository, times(1)).save(any(Item.class));
+    }
+
+    @Test
+    void updateItem_shouldThrowIllegalArgumentException_whenRequestIsEmpty() {
+        ItemDto.UpdateItemRequest updateRequest = new ItemDto.UpdateItemRequest(null, null, null);
+        assertThrows(IllegalArgumentException.class, () -> itemService.updateItem(1L, 1L, updateRequest, listOwner));
+    }
+
+    @Test
+    void updateItem_shouldThrowResourceNotFoundException_whenItemNotFound() {
+        ItemDto.UpdateItemRequest updateRequest = new ItemDto.UpdateItemRequest("New Name", null, null);
+        when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
+        when(itemRepository.findByIdAndShoppingListId(1L, 1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> itemService.updateItem(1L, 1L, updateRequest, listOwner));
+    }
+
+    @Test
+    void updateItem_shouldThrowForbiddenException_whenUserIsNotOwner() {
+        User anotherUser = new User();
+        anotherUser.setId(2L);
+        ItemDto.UpdateItemRequest updateRequest = new ItemDto.UpdateItemRequest("New Name", null, null);
+        when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
+
+        assertThrows(ForbiddenException.class, () -> itemService.updateItem(1L, 1L, updateRequest, anotherUser));
+    }
+
+    @Test
+    void deleteItem_shouldDeleteItem_whenUserIsOwner() {
+        when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
+        when(itemRepository.findByIdAndShoppingListId(1L, 1L)).thenReturn(Optional.of(item));
+        doNothing().when(itemRepository).delete(item);
+
+        assertDoesNotThrow(() -> itemService.deleteItem(1L, 1L, listOwner));
+
+        verify(itemRepository, times(1)).delete(item);
+    }
+
+    @Test
+    void deleteItem_shouldThrowForbiddenException_whenUserIsNotOwnerOrCollaborator() {
+        User anotherUser = new User();
+        anotherUser.setId(2L);
+        when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
+
+        assertThrows(ForbiddenException.class, () -> itemService.deleteItem(1L, 1L, anotherUser));
+
+        verify(itemRepository, never()).delete(any(Item.class));
+    }
+
+    @Test
+    void deleteItem_shouldThrowResourceNotFoundException_whenItemNotFound() {
+        when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
+        when(itemRepository.findByIdAndShoppingListId(1L, 1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> itemService.deleteItem(1L, 1L, listOwner));
+
+        verify(itemRepository, never()).delete(any(Item.class));
+    }
+
+    @Test
+    void deleteItem_shouldThrowResourceNotFoundException_whenListNotFound() {
+        when(shoppingListRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> itemService.deleteItem(1L, 1L, listOwner));
+
+        verify(itemRepository, never()).delete(any(Item.class));
+    }
 }
