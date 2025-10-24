@@ -2,7 +2,10 @@
   "name": "@your-list/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "openapi:fetch": "curl http://localhost:8080/v3/api-docs > tools/openapi/your-list-openapi-docs.json && npm run openapi:generate && nx format:write --files tools/openapi/your-list-openapi-docs.json",
+    "openapi:generate": "openapi-generator-cli generate --config tools/openapi/your-list-openapi-generator-config.json"
+  },
   "private": true,
   "dependencies": {
     "@angular/common": "~20.3.0",
@@ -34,6 +37,7 @@
     "@nx/js": "21.6.4",
     "@nx/web": "21.6.4",
     "@nx/workspace": "21.6.4",
+    "@openapitools/openapi-generator-cli": "^2.25.0",
     "@schematics/angular": "~20.3.0",
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",

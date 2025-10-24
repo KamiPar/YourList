@@ -1,0 +1,19 @@
+{
+  "generatorName": "typescript-angular",
+  "inputSpec": "tools/openapi/your-list-openapi-docs.json",
+  "outputDir": "libs/shared/data-access/data-access-api/src/lib",
+  "validateSpec": true,
+  "skipValidateSpec": false,
+  "typeMappings": {
+    "DateTime": "Date",
+    "set": "Array"
+  },
+  "additionalProperties": {
+    "ngVersion": "17.3.0",
+    "fileNaming": "kebab-case",
+    "modelFileSuffix": ".model",
+    "serviceFileSuffix": "-rest.service",
+    "serviceSuffix": "RestService",
+    "apiModulePrefix": "SharedDataAccess"
+  }
+}
