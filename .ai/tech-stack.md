@@ -9,3 +9,4 @@ Frontend:
 - TailwindCSS (^4.1.14)
 - Typescript (~5.9.2)
 - Nx 21.6.4
+- Angular Material 20

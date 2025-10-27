@@ -34,31 +34,6 @@ public final class ShoppingListDto {
     ) {}
 
     /**
-     * DTO representing a list in a collection response.
-     * This is an extended view with aggregated data.
-     * @param id The list's ID.
-     * @param name The list's name.
-     * @param ownerId The ID of the list's owner.
-     * @param isOwner Flag indicating if the current user is the owner.
-     * @param shareToken The unique token for sharing the list.
-     * @param createdAt Timestamp of list creation.
-     * @param updatedAt Timestamp of the last update.
-     * @param itemCount Total number of items on the list.
-     * @param boughtItemCount Number of items marked as bought.
-     */
-    public record ShoppingListSummaryResponse(
-            Long id,
-            String name,
-            Long ownerId,
-            boolean isOwner,
-            UUID shareToken,
-            Instant createdAt,
-            Instant updatedAt,
-            long itemCount,
-            long boughtItemCount
-    ) {}
-
-    /**
      * DTO for a single list response.
      * This is a detailed view of a specific list.
      * @param id The list's ID.

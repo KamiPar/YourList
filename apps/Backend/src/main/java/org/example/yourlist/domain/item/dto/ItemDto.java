@@ -61,4 +61,24 @@ public final class ItemDto {
             Long id,
             Long listId
     ) {}
+
+    /**
+     * DTO for an item response that includes the name of the shopping list.
+     * @param id The item's ID.
+     * @param listId The ID of the list it belongs to.
+     * @param listName The name of the shopping list.
+     * @param name The item's name.
+     * @param description The item's description.
+     * @param isBought The item's bought status.
+     * @param createdAt Timestamp of item creation.
+     */
+    public record ItemWithListNameResponse(
+        Long id,
+        Long listId,
+        String listName,
+        String name,
+        String description,
+        boolean isBought,
+        LocalDateTime createdAt
+    ) {}
 }

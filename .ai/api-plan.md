@@ -388,6 +388,7 @@
   {
     "id": 1,
     "listId": 1,
+    "listName": "firstList",
     "name": "Milk",
     "description": "2 liters",
     "isBought": false,
@@ -396,6 +397,7 @@
   {
     "id": 2,
     "listId": 1,
+    "listName": "andrzej",
     "name": "Bread",
     "description": null,
     "isBought": true,

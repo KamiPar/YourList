@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/lists/{listId}/items")
 @RequiredArgsConstructor
@@ -17,6 +19,15 @@ import org.springframework.web.bind.annotation.*;
 public class ItemController {
 
     private final ItemService itemService;
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ItemDto.ItemWithListNameResponse> getAllItemsForList(
+            @PathVariable Long listId,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return itemService.findAllItemsByListId(listId, currentUser);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,0 +1,10 @@
+{
+  "servers": [
+    {
+      "name": "10x-mvp-tracker",
+      "command": "npx tsx",
+      "args": ["tools/10x-mvp-tracker/src/index.ts"],
+      "transport": "stdio"
+    }
+  ]
+}

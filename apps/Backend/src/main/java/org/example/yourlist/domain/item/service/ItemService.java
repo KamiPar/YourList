@@ -7,6 +7,7 @@ import org.example.yourlist.domain.item.mapper.ItemMapper;
 import org.example.yourlist.domain.item.repository.ItemRepository;
 import org.example.yourlist.domain.list.entity.ShoppingList;
 import org.example.yourlist.domain.list.repository.ShoppingListRepository;
+import org.example.yourlist.domain.list.service.ShoppingListService;
 import org.example.yourlist.domain.user.entity.User;
 import org.example.yourlist.exception.ForbiddenException;
 import org.example.yourlist.exception.ResourceNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ShoppingListRepository shoppingListRepository;
     private final ItemMapper itemMapper;
+    private final ShoppingListService shoppingListService;
 
     @Transactional
     public ItemDto.ItemResponse createItem(Long listId, ItemDto.CreateItemRequest request, User currentUser) {
@@ -97,5 +100,11 @@ public class ItemService {
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found with id: " + itemId + " on list " + listId));
 
         itemRepository.delete(item);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ItemDto.ItemWithListNameResponse> findAllItemsByListId(Long listId, User currentUser) {
+        shoppingListService.checkAccess(listId, currentUser);
+        return itemRepository.findAllWithListNameByShoppingListId(listId);
     }
 }

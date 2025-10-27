@@ -6,6 +6,7 @@ import org.example.yourlist.domain.item.mapper.ItemMapper;
 import org.example.yourlist.domain.item.repository.ItemRepository;
 import org.example.yourlist.domain.list.entity.ShoppingList;
 import org.example.yourlist.domain.list.repository.ShoppingListRepository;
+import org.example.yourlist.domain.list.service.ShoppingListService;
 import org.example.yourlist.domain.user.entity.User;
 import org.example.yourlist.exception.ForbiddenException;
 import org.example.yourlist.exception.ResourceNotFoundException;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,6 +37,9 @@ class ItemServiceTest {
 
     @Mock
     private ItemMapper itemMapper;
+
+    @Mock
+    private ShoppingListService shoppingListService;
 
     @InjectMocks
     private ItemService itemService;
@@ -187,5 +192,57 @@ class ItemServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> itemService.deleteItem(1L, 1L, listOwner));
 
         verify(itemRepository, never()).delete(any(Item.class));
+    }
+
+    @Test
+    void findAllItemsByListId_shouldReturnItems_whenUserHasAccess() {
+        // Given
+        Long listId = 1L;
+        ItemDto.ItemWithListNameResponse itemDto = new ItemDto.ItemWithListNameResponse(1L, listId, "My List", "Milk", "2L", false, LocalDateTime.now());
+        List<ItemDto.ItemWithListNameResponse> expectedItems = Collections.singletonList(itemDto);
+
+        doNothing().when(shoppingListService).checkAccess(listId, listOwner);
+        when(itemRepository.findAllWithListNameByShoppingListId(listId)).thenReturn(expectedItems);
+
+        // When
+        List<ItemDto.ItemWithListNameResponse> result = itemService.findAllItemsByListId(listId, listOwner);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Milk", result.get(0).name());
+        verify(shoppingListService, times(1)).checkAccess(listId, listOwner);
+        verify(itemRepository, times(1)).findAllWithListNameByShoppingListId(listId);
+    }
+
+    @Test
+    void findAllItemsByListId_shouldThrowForbiddenException_whenUserLacksAccess() {
+        // Given
+        Long listId = 1L;
+        User anotherUser = new User();
+        anotherUser.setId(2L);
+
+        doThrow(new ForbiddenException("Access denied")).when(shoppingListService).checkAccess(listId, anotherUser);
+
+        // When & Then
+        assertThrows(ForbiddenException.class, () -> itemService.findAllItemsByListId(listId, anotherUser));
+        verify(itemRepository, never()).findAllWithListNameByShoppingListId(anyLong());
+    }
+
+    @Test
+    void findAllItemsByListId_shouldReturnEmptyList_whenListHasNoItems() {
+        // Given
+        Long listId = 1L;
+        doNothing().when(shoppingListService).checkAccess(listId, listOwner);
+        when(itemRepository.findAllWithListNameByShoppingListId(listId)).thenReturn(Collections.emptyList());
+
+        // When
+        List<ItemDto.ItemWithListNameResponse> result = itemService.findAllItemsByListId(listId, listOwner);
+
+        // Then
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(shoppingListService, times(1)).checkAccess(listId, listOwner);
+        verify(itemRepository, times(1)).findAllWithListNameByShoppingListId(listId);
     }
 }
