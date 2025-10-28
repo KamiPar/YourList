@@ -15,14 +15,16 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@your-list/shopping-lists/feature-lists": [
-        "libs/shopping-lists/feature-lists/src/index.ts"
+      "@your-list/Frontend/features/feature-lists": [
+        "libs/Frontend/features/feature-lists/src/index.ts"
+      ],
+      "@your-list/Frontend/features/feature-lists-details": [
+        "libs/Frontend/features/feature-lists-details/src/index.ts"
       ],
       "@your-list/shared/data-access/data-access-api": [
         "libs/shared/data-access/data-access-api/src/lib/index.ts"
       ],
-      "@your-list/shared/ui/ui/skeleton-loader": ["libs/shared/ui/src/index.ts"],
-      "@your-list/shared/ui/ui/empty-state": ["libs/shared/ui/src/index.ts"]
+      "@your-list/shared/ui": ["libs/shared/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -5,13 +5,13 @@ import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateListModal } from '../create-list/create-list-modal';
 import { ShoppingListItem } from '../shopping-list-item/shopping-list-item';
-import { SkeletonLoaderComponent } from '@your-list/shared/ui/ui/empty-state';
+import { SkeletonLoaderComponent } from 'libs/shared/ui/src';
 
-import { EmptyStateComponent } from '@your-list/shared/ui/ui/empty-state';
+import { EmptyStateComponent } from 'libs/shared/ui/src';
 import {
   PageShoppingListSummaryResponse, ShoppingListControllerRestService,
   ShoppingListSummaryResponse
-} from '@your-list/shared/data-access/data-access-api';
+} from 'libs/shared/data-access/data-access-api/src/lib';
 
 
 export interface ShoppingListSummaryVm {

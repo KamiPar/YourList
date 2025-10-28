@@ -5,7 +5,7 @@ export const appRoutes: Route[] = [
     path: 'lists',
     // canActivate: [authGuard], // TODO: Implement and import AuthGuard
     loadComponent: () =>
-      import('@your-list/shopping-lists/feature-lists').then(
+      import('@your-list/Frontend/features/feature-lists').then(
         (c) => c.ListViewComponent
       ),
   },

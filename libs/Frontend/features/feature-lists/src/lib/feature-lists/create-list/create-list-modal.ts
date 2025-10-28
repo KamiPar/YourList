@@ -5,7 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { MatDialogRef } from '@angular/material/dialog';
 import { map, Observable, startWith } from 'rxjs';
-import { ShoppingListControllerRestService, ShoppingListResponse } from '@your-list/shared/data-access/data-access-api';
+import { ShoppingListControllerRestService, ShoppingListResponse } from 'libs/shared/data-access/data-access-api/src/lib';
 
 @Component({
   selector: 'your-list-create-list-modal',
