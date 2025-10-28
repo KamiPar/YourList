@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 README.md
 api.base.service.ts
 api.module.ts
@@ -16,13 +15,19 @@ model/create-item-request.model.ts
 model/create-shopping-list-request.model.ts
 model/granted-authority.model.ts
 model/item-response.model.ts
+model/item-with-list-name-response.model.ts
 model/item.model.ts
 model/models.ts
+model/page-shopping-list-summary-response.model.ts
+model/pageable-object.model.ts
+model/pageable.model.ts
 model/problem-detail.model.ts
 model/shopping-list-response.model.ts
 model/shopping-list-share-id.model.ts
 model/shopping-list-share.model.ts
+model/shopping-list-summary-response.model.ts
 model/shopping-list.model.ts
+model/sort-object.model.ts
 model/update-item-request.model.ts
 model/user-login-request.model.ts
 model/user-login-response.model.ts

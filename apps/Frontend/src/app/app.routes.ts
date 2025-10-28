@@ -1,3 +1,12 @@
 import { Route } from '@angular/router';
 
-export const appRoutes: Route[] = [];
+export const appRoutes: Route[] = [
+  {
+    path: 'lists',
+    // canActivate: [authGuard], // TODO: Implement and import AuthGuard
+    loadComponent: () =>
+      import('@your-list/shopping-lists/feature-lists').then(
+        (c) => c.ListViewComponent
+      ),
+  },
+];

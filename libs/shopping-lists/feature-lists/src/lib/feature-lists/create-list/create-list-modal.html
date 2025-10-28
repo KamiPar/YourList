@@ -1,0 +1,44 @@
+<div class="p-6">
+  <h2 class="text-xl font-semibold mb-4">Utwórz nową listę</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mb-4">
+      <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nazwa listy</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        placeholder="np. Zakupy na weekend"
+      />
+      @if (nameErrors$ | async; as nameErrors) {
+        @if (nameErrors.show) {
+          <div class="text-red-600 text-sm mt-1">
+            @if (nameErrors.required) {
+              <p>Nazwa listy jest wymagana.</p>
+            }
+            @if (nameErrors.maxlength) {
+              <p>Nazwa listy nie może przekraczać 255 znaków.</p>
+            }
+          </div>
+        }
+      }
+    </div>
+
+    <div class="flex justify-end gap-4 mt-6">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+      >
+        Anuluj
+      </button>
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed"
+      >
+        Utwórz
+      </button>
+    </div>
+  </form>
+</div>

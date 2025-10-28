@@ -15,4 +15,5 @@
 - Leverage Angular CLI for schematics and code generation
 - Implement proper lazy loading with loadComponent and loadChildren
 - Use TailwindCSS instead of regular SCSS files
+- Use model-view-presenter pattern
 

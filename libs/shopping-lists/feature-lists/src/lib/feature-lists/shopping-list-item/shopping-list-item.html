@@ -1,0 +1,33 @@
+<div
+  (click)="onNavigate()"
+  class="block p-4 bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 cursor-pointer transition-colors duration-200"
+>
+  <div class="flex justify-between items-start">
+    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900">{{ list().name }}</h5>
+    @if (list().isShared) {
+      <span title="Lista udostępniona">
+        <!-- Heroicon: users -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197m0 0A5.975 5.975 0 0112 13a5.975 5.975 0 013-1.197M15 21a9 9 0 00-9-9" />
+        </svg>
+      </span>
+    }
+  </div>
+  <p class="font-normal text-gray-700">{{ list().itemCountLabel }}</p>
+  <div class="flex justify-between items-center mt-4">
+    <span class="text-sm text-gray-500">{{ list().lastModified }}</span>
+    @if (list().showDeleteButton) {
+      <button
+        (click)="onDelete($event)"
+        type="button"
+        class="text-red-600 hover:text-red-800 transition-colors duration-200"
+        title="Usuń listę"
+      >
+        <!-- Heroicon: trash -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+      </button>
+    }
+  </div>
+</div>

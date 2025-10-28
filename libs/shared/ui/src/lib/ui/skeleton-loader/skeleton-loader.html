@@ -1,0 +1,12 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+  @for (_ of [].constructor(8); track $index) {
+    <div class="block p-4 bg-white rounded-lg border border-gray-200 shadow-md animate-pulse">
+      <div class="h-6 bg-gray-300 rounded w-3/4 mb-4"></div>
+      <div class="h-4 bg-gray-300 rounded w-1/2 mb-4"></div>
+      <div class="flex justify-between items-center mt-4">
+        <div class="h-4 bg-gray-300 rounded w-1/4"></div>
+        <div class="h-5 w-5 bg-gray-300 rounded-full"></div>
+      </div>
+    </div>
+  }
+</div>

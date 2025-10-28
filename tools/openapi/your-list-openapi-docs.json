@@ -101,7 +101,159 @@
         }
       }
     },
+    "/api/lists": {
+      "get": {
+        "tags": ["shopping-list-controller"],
+        "operationId": "getAllListsForUser",
+        "parameters": [
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": { "$ref": "#/components/schemas/Pageable" }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageShoppingListSummaryResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["shopping-list-controller"],
+        "operationId": "createList",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateShoppingListRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/lists/{listId}/items": {
+      "get": {
+        "tags": ["item-controller"],
+        "operationId": "getAllItemsForList",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemWithListNameResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "bearerAuth": [] }]
+      },
       "post": {
         "tags": ["item-controller"],
         "operationId": "createItem",
@@ -156,58 +308,6 @@
           }
         },
         "security": [{ "bearerAuth": [] }]
-      }
-    },
-    "/api/lists/create": {
-      "post": {
-        "tags": ["shopping-list-controller"],
-        "operationId": "createList",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateShoppingListRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/problem+json": {
-                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/problem+json": {
-                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/problem+json": {
-                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ShoppingListResponse"
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/api/lists/{listId}/items/{itemId}": {
@@ -358,6 +458,56 @@
           }
         }
       }
+    },
+    "/api/lists/{id}": {
+      "get": {
+        "tags": ["shopping-list-controller"],
+        "operationId": "getList",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/ProblemDetail" }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -449,12 +599,12 @@
             "items": { "$ref": "#/components/schemas/ShoppingListShare" },
             "uniqueItems": true
           },
+          "username": { "type": "string" },
           "authorities": {
             "type": "array",
             "items": { "$ref": "#/components/schemas/GrantedAuthority" }
           },
           "password": { "type": "string" },
-          "username": { "type": "string" },
           "enabled": { "type": "boolean" },
           "accountNonExpired": { "type": "boolean" },
           "accountNonLocked": { "type": "boolean" },
@@ -476,25 +626,6 @@
           "token": { "type": "string" }
         }
       },
-      "CreateItemRequest": {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string", "maxLength": 255, "minLength": 0 },
-          "description": { "type": "string", "maxLength": 255, "minLength": 0 }
-        },
-        "required": ["name"]
-      },
-      "ItemResponse": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "integer", "format": "int64" },
-          "listId": { "type": "integer", "format": "int64" },
-          "name": { "type": "string" },
-          "description": { "type": "string" },
-          "isBought": { "type": "boolean" },
-          "createdAt": { "type": "string", "format": "date-time" }
-        }
-      },
       "CreateShoppingListRequest": {
         "type": "object",
         "properties": {
@@ -514,12 +645,105 @@
           "updatedAt": { "type": "string", "format": "date-time" }
         }
       },
+      "CreateItemRequest": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "maxLength": 255, "minLength": 0 },
+          "description": { "type": "string", "maxLength": 255, "minLength": 0 }
+        },
+        "required": ["name"]
+      },
+      "ItemResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "listId": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "isBought": { "type": "boolean" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
       "UpdateItemRequest": {
         "type": "object",
         "properties": {
           "name": { "type": "string", "maxLength": 255, "minLength": 0 },
           "description": { "type": "string", "maxLength": 255, "minLength": 0 },
           "isBought": { "type": "boolean" }
+        }
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "page": { "type": "integer", "format": "int32", "minimum": 0 },
+          "size": { "type": "integer", "format": "int32", "minimum": 1 },
+          "sort": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "PageShoppingListSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "totalElements": { "type": "integer", "format": "int64" },
+          "totalPages": { "type": "integer", "format": "int32" },
+          "first": { "type": "boolean" },
+          "last": { "type": "boolean" },
+          "size": { "type": "integer", "format": "int32" },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShoppingListSummaryResponse"
+            }
+          },
+          "number": { "type": "integer", "format": "int32" },
+          "sort": { "$ref": "#/components/schemas/SortObject" },
+          "pageable": { "$ref": "#/components/schemas/PageableObject" },
+          "numberOfElements": { "type": "integer", "format": "int32" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": { "type": "integer", "format": "int64" },
+          "sort": { "$ref": "#/components/schemas/SortObject" },
+          "paged": { "type": "boolean" },
+          "unpaged": { "type": "boolean" },
+          "pageNumber": { "type": "integer", "format": "int32" },
+          "pageSize": { "type": "integer", "format": "int32" }
+        }
+      },
+      "ShoppingListSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" },
+          "ownerId": { "type": "integer", "format": "int64" },
+          "isOwner": { "type": "boolean" },
+          "shareToken": { "type": "string", "format": "uuid" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "itemCount": { "type": "integer", "format": "int64" },
+          "boughtItemCount": { "type": "integer", "format": "int64" }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "empty": { "type": "boolean" },
+          "sorted": { "type": "boolean" },
+          "unsorted": { "type": "boolean" }
+        }
+      },
+      "ItemWithListNameResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int64" },
+          "listId": { "type": "integer", "format": "int64" },
+          "listName": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "isBought": { "type": "boolean" },
+          "createdAt": { "type": "string", "format": "date-time" }
         }
       }
     }

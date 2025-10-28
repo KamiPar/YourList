@@ -15,7 +15,14 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@your-list/menu": ["libs/src/index.ts"]
+      "@your-list/shopping-lists/feature-lists": [
+        "libs/shopping-lists/feature-lists/src/index.ts"
+      ],
+      "@your-list/shared/data-access/data-access-api": [
+        "libs/shared/data-access/data-access-api/src/lib/index.ts"
+      ],
+      "@your-list/shared/ui/ui/skeleton-loader": ["libs/shared/ui/src/index.ts"],
+      "@your-list/shared/ui/ui/empty-state": ["libs/shared/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
