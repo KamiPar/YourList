@@ -15,13 +15,13 @@ import {
 
 
 export interface ShoppingListSummaryVm {
-  id: number;
-  name: string;
-  isOwner: boolean;
-  lastModified: string; // TODO: Implement date formatting pipe/logic
-  itemCountLabel: string;
-  showDeleteButton: boolean;
-  isShared: boolean;
+  id?: number;
+  name?: string;
+  isOwner?: boolean;
+  lastModified?: string; // TODO: Implement date formatting pipe/logic
+  itemCountLabel?: string;
+  showDeleteButton?: boolean;
+  isShared?: boolean;
 }
 
 @Component({
@@ -105,13 +105,13 @@ export class ListViewComponent implements OnInit {
 
   private mapToVm(list: ShoppingListSummaryResponse): ShoppingListSummaryVm {
     return {
-      id: list.id!,
-      name: list.name!,
-      isOwner: list.isOwner!,
-      lastModified: new Date(list.updatedAt!).toLocaleDateString(), // Placeholder
+      id: list.id,
+      name: list.name,
+      isOwner: list.isOwner,
+      lastModified: new Date(list.updatedAt).toLocaleDateString(),
       itemCountLabel: `${list.itemCount} produktów (${list.boughtItemCount} kupione)`,
-      showDeleteButton: list.isOwner!,
-      isShared: !list.isOwner!,
+      showDeleteButton: list.isOwner,
+      isShared: !list.isOwner,
     };
   }
 }

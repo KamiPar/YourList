@@ -16,7 +16,7 @@ export interface ShoppingListSummaryResponse {
     isOwner?: boolean;
     shareToken?: string;
     createdAt?: Date;
-    updatedAt?: Date;
+    updatedAt: Date;
     itemCount?: number;
     boughtItemCount?: number;
 }

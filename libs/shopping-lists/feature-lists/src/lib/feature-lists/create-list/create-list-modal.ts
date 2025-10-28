@@ -36,7 +36,7 @@ export class CreateListModal implements OnInit {
       this.nameErrors$ = nameControl.statusChanges.pipe(
         startWith(nameControl.status),
         map(() => {
-          const show = !!(nameControl.invalid && (nameControl.dirty || nameControl.touched));
+          const show = (nameControl.invalid && (nameControl.dirty || nameControl.touched));
           return {
             show,
             required: show && nameControl.hasError('required'),
