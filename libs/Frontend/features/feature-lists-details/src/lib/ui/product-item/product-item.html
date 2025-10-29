@@ -1,0 +1,17 @@
+<div class="flex items-center p-2 border rounded-md" [class.bg-gray-100]="item.isBought">
+  <input
+    type="checkbox"
+    [checked]="item.isBought"
+    (change)="onStatusChange($event.target.checked)"
+    class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+  />
+  <div class="ml-3 flex-grow">
+    <span class="text-gray-900" [class.line-through]="item.isBought">{{ item.name }}</span>
+    @if (item.description) {
+      <p class="text-sm text-gray-500" [class.line-through]="item.isBought">{{ item.description }}</p>
+    }
+  </div>
+  <button (click)="onDelete()" class="ml-4 text-red-500 hover:text-red-700">
+    Delete
+  </button>
+</div>

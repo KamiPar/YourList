@@ -1,0 +1,28 @@
+@if (state.viewModel(); as vm) {
+  <div class="container mx-auto p-4">
+    @if (vm.isLoading) {
+      <p>Loading...</p>
+    } @else if (vm.error) {
+      <div>
+        <p>Error: {{ vm.error }}</p>
+      </div>
+    } @else {
+      @if(vm.listInfo) {
+        <your-list-list-header [listName]="vm.listInfo.name" [isOwner]="vm.listInfo.isOwner" />
+      }
+
+      <your-list-add-item-form (itemAdded)="state.addItem($event)" />
+
+      @if (vm.isEmpty) {
+        <your-list-empty-state />
+      } @else {
+        <your-list-product-list
+          [itemsToBuy]="vm.itemsToBuy"
+          [boughtItems]="vm.boughtItems"
+          (itemUpdated)="state.updateItem($event.itemId, $event.data)"
+          (itemDeleted)="state.deleteItem($event)"
+        />
+      }
+    }
+  </div>
+}

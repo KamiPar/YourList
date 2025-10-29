@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FeatureListsDetails } from './feature-lists-details';
+import { ListHeader } from './list-header';
 
-describe('FeatureListsDetails', () => {
-  let component: FeatureListsDetails;
-  let fixture: ComponentFixture<FeatureListsDetails>;
+describe('ListHeader', () => {
+  let component: ListHeader;
+  let fixture: ComponentFixture<ListHeader>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FeatureListsDetails],
+      imports: [ListHeader],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FeatureListsDetails);
+    fixture = TestBed.createComponent(ListHeader);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
