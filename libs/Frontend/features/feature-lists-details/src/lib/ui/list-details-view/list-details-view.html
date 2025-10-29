@@ -8,7 +8,9 @@
       </div>
     } @else {
       @if(vm.listInfo) {
-        <your-list-list-header [listName]="vm.listInfo.name" [isOwner]="vm.listInfo.isOwner" />
+        <your-list-list-header [listName]="vm.listInfo.name"
+                               [isOwner]="vm.listInfo.isOwner"
+        />
       }
 
       <your-list-add-item-form (itemAdded)="state.addItem($event)" />

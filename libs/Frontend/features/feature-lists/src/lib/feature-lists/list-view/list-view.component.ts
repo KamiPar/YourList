@@ -5,13 +5,10 @@ import { Router, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateListModal } from '../create-list/create-list-modal';
 import { ShoppingListItem } from '../shopping-list-item/shopping-list-item';
-import { SkeletonLoaderComponent } from 'libs/shared/ui/src';
+import { SkeletonLoaderComponent } from '@your-list/shared/ui';
+import { EmptyStateComponent } from '@your-list/shared/ui';
+import { ShoppingListControllerRestService, ShoppingListSummaryResponse, PageShoppingListSummaryResponse } from '@your-list/shared/data-access/data-access-api';
 
-import { EmptyStateComponent } from 'libs/shared/ui/src';
-import {
-  PageShoppingListSummaryResponse, ShoppingListControllerRestService,
-  ShoppingListSummaryResponse
-} from 'libs/shared/data-access/data-access-api/src/lib';
 
 
 export interface ShoppingListSummaryVm {
@@ -27,13 +24,23 @@ export interface ShoppingListSummaryVm {
 @Component({
   selector: 'your-list-lists-view',
   standalone: true,
-  imports: [CommonModule, RouterModule, ShoppingListItem,EmptyStateComponent, SkeletonLoaderComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ShoppingListItem,
+    EmptyStateComponent,
+    SkeletonLoaderComponent,
+    EmptyStateComponent,
+    SkeletonLoaderComponent,
+  ],
   templateUrl: './list-view.component.html',
   styleUrl: './list-view.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListViewComponent implements OnInit {
-  private shoppingListControllerRestService = inject(ShoppingListControllerRestService);
+  private shoppingListControllerRestService = inject(
+    ShoppingListControllerRestService
+  );
   private router = inject(Router);
   private dialog = inject(MatDialog);
 
@@ -49,8 +56,12 @@ export class ListViewComponent implements OnInit {
 
   public isLoading = computed(() => this.state().status === 'loading');
   public isLoaded = computed(() => this.state().status === 'loaded');
-  public isEmpty = computed(() => this.isLoaded() && this.state().lists.length === 0);
-  public listsVm = computed(() => this.state().lists.map((list) => this.mapToVm(list)));
+  public isEmpty = computed(
+    () => this.isLoaded() && this.state().lists.length === 0
+  );
+  public listsVm = computed(() =>
+    this.state().lists.map((list) => this.mapToVm(list))
+  );
 
   public ngOnInit(): void {
     this.shoppingListControllerRestService
@@ -64,7 +75,11 @@ export class ListViewComponent implements OnInit {
           }));
         },
         error: (err: Error) => {
-          this.state.update((s) => ({ ...s, status: 'error', error: err.message }));
+          this.state.update((s) => ({
+            ...s,
+            status: 'error',
+            error: err.message,
+          }));
         },
       });
   }

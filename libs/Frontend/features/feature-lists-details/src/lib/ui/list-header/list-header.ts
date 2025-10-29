@@ -5,11 +5,12 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'your-list-list-header',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './list-header.html',
   styleUrl: './list-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,6 +22,4 @@ export class ListHeader {
   @Output() public backClicked = new EventEmitter<void>();
   @Output() public shareClicked = new EventEmitter<void>();
   @Output() public listNameUpdated = new EventEmitter<string>();
-
-  // TODO: Implement inline editing logic
 }

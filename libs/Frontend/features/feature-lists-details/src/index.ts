@@ -1,1 +1,1 @@
-export * from './lib/feature-lists-details/feature-lists-details';
+export * from './lib/ui/list-details-view/list-details-view';

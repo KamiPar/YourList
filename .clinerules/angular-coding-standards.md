@@ -16,4 +16,6 @@
 - Implement proper lazy loading with loadComponent and loadChildren
 - Use TailwindCSS instead of regular SCSS files
 - Use model-view-presenter pattern
+- Use npx each time you need to call nx command for example npx nx g c component-name
+
 
