@@ -11,8 +11,11 @@ import org.example.yourlist.domain.list.service.ShoppingListService;
 import org.example.yourlist.domain.user.entity.User;
 import org.example.yourlist.exception.ForbiddenException;
 import org.example.yourlist.exception.ResourceNotFoundException;
+import org.example.yourlist.websocket.WebSocketUpdateService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +28,7 @@ public class ItemService {
     private final ShoppingListRepository shoppingListRepository;
     private final ItemMapper itemMapper;
     private final ShoppingListService shoppingListService;
+    private final WebSocketUpdateService webSocketUpdateService;
 
     @Transactional
     public ItemDto.ItemResponse createItem(Long listId, ItemDto.CreateItemRequest request, User currentUser) {
@@ -44,8 +48,16 @@ public class ItemService {
         item.setCreatedAt(LocalDateTime.now());
 
         Item savedItem = itemRepository.save(item);
+        ItemDto.ItemResponse itemResponse = itemMapper.toResponse(savedItem);
 
-        return itemMapper.toResponse(savedItem);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                webSocketUpdateService.broadcast(listId, "ITEM_ADDED", itemResponse);
+            }
+        });
+
+        return itemResponse;
     }
 
     @Transactional
@@ -79,8 +91,16 @@ public class ItemService {
         }
 
         Item updatedItem = itemRepository.save(item);
+        ItemDto.ItemResponse itemResponse = itemMapper.toResponse(updatedItem);
 
-        return itemMapper.toResponse(updatedItem);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                webSocketUpdateService.broadcast(listId, "ITEM_UPDATED", itemResponse);
+            }
+        });
+
+        return itemResponse;
     }
 
     @Transactional
@@ -100,6 +120,13 @@ public class ItemService {
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found with id: " + itemId + " on list " + listId));
 
         itemRepository.delete(item);
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                webSocketUpdateService.broadcast(listId, "ITEM_DELETED", new ItemDto.ItemDeletedWs(itemId, listId));
+            }
+        });
     }
 
     @Transactional(readOnly = true)

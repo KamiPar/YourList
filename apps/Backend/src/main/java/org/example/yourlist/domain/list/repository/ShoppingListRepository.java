@@ -40,4 +40,7 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingList, Long
 
   @Query("SELECT sl FROM ShoppingList sl JOIN FETCH sl.owner WHERE sl.id = :id")
   Optional<ShoppingList> findByIdWithOwner(@Param("id") Long id);
+
+  @Query("SELECT sl FROM ShoppingList sl JOIN FETCH sl.owner LEFT JOIN FETCH sl.shares WHERE sl.id = :id")
+  Optional<ShoppingList> findByIdWithOwnerAndShares(@Param("id") Long id);
 }

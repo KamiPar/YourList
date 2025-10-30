@@ -9,11 +9,15 @@ import org.example.yourlist.domain.list.repository.ShoppingListRepository;
 import org.example.yourlist.domain.user.entity.User;
 import org.example.yourlist.exception.ForbiddenException;
 import org.example.yourlist.exception.ResourceNotFoundException;
+import org.example.yourlist.websocket.WebSocketUpdateService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -22,6 +26,7 @@ import java.util.UUID;
 public class ShoppingListService {
     private final ShoppingListRepository shoppingListRepository;
     private final ShoppingListMapper shoppingListMapper;
+    private final WebSocketUpdateService webSocketUpdateService;
 
     @Transactional
     public ShoppingListDto.ShoppingListResponse createList(ShoppingListDto.CreateShoppingListRequest createShoppingListRequest, User currentUser) {
@@ -34,6 +39,36 @@ public class ShoppingListService {
                 .build();
         ShoppingList savedShoppingList = shoppingListRepository.save(shoppingList);
         return shoppingListMapper.toDto(savedShoppingList, currentUser);
+    }
+
+    @Transactional
+    public ShoppingListDto.ShoppingListResponse updateList(Long listId, ShoppingListDto.UpdateShoppingListRequest request, User currentUser) {
+        ShoppingList shoppingList = shoppingListRepository.findById(listId)
+                .orElseThrow(() -> new ResourceNotFoundException("Shopping list not found with id: " + listId));
+
+        if (!shoppingList.getOwner().getId().equals(currentUser.getId())) {
+            throw new ForbiddenException("You do not have permission to update this list.");
+        }
+
+        shoppingList.setName(request.name());
+        shoppingList.setUpdatedAt(LocalDateTime.now());
+        ShoppingList updatedList = shoppingListRepository.save(shoppingList);
+
+        ShoppingListDto.ShoppingListResponse listResponse = shoppingListMapper.toDto(updatedList, currentUser);
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                var event = new ShoppingListDto.ShoppingListUpdatedWs(
+                        listResponse.id(),
+                        listResponse.name(),
+                        Instant.now()
+                );
+                webSocketUpdateService.broadcast(listId, "LIST_UPDATED", event);
+            }
+        });
+
+        return listResponse;
     }
 
     @Transactional(readOnly = true)
@@ -55,8 +90,9 @@ public class ShoppingListService {
         return shoppingListMapper.toDto(shoppingList, currentUser);
     }
 
+    @Transactional(readOnly = true)
     public void checkAccess(Long listId, User currentUser) {
-        ShoppingList shoppingList = shoppingListRepository.findById(listId)
+        ShoppingList shoppingList = shoppingListRepository.findByIdWithOwnerAndShares(listId)
                 .orElseThrow(() -> new ResourceNotFoundException("Shopping list not found with id: " + listId));
 
         boolean isOwner = shoppingList.getOwner().getId().equals(currentUser.getId());
