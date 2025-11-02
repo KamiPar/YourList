@@ -6,10 +6,14 @@ import org.example.yourlist.domain.list.dto.ShoppingListSummaryResponse;
 import org.example.yourlist.domain.list.entity.ShoppingList;
 import org.example.yourlist.domain.list.mapper.ShoppingListMapper;
 import org.example.yourlist.domain.list.repository.ShoppingListRepository;
+import org.example.yourlist.domain.listshare.entity.ShoppingListShare;
+import org.example.yourlist.domain.listshare.repository.ShoppingListShareRepository;
 import org.example.yourlist.domain.user.entity.User;
 import org.example.yourlist.exception.ForbiddenException;
+import org.example.yourlist.exception.UserAlreadyHasAccessException;
 import org.example.yourlist.exception.ResourceNotFoundException;
 import org.example.yourlist.websocket.WebSocketUpdateService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,8 +29,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ShoppingListService {
     private final ShoppingListRepository shoppingListRepository;
+    private final ShoppingListShareRepository shoppingListShareRepository;
     private final ShoppingListMapper shoppingListMapper;
     private final WebSocketUpdateService webSocketUpdateService;
+
+    @Value("${app.base-url}")
+    private String appBaseUrl;
 
     @Transactional
     public ShoppingListDto.ShoppingListResponse createList(ShoppingListDto.CreateShoppingListRequest createShoppingListRequest, User currentUser) {
@@ -78,14 +86,10 @@ public class ShoppingListService {
 
     @Transactional(readOnly = true)
     public ShoppingListDto.ShoppingListResponse getShoppingListDetails(Long listId, User currentUser) {
-        ShoppingList shoppingList = shoppingListRepository.findByIdWithOwner(listId)
+        ShoppingList shoppingList = shoppingListRepository.findByIdWithOwnerAndShares(listId)
                 .orElseThrow(() -> new ResourceNotFoundException("Shopping list not found with id: " + listId));
 
-        boolean isOwner = shoppingList.getOwner().getId().equals(currentUser.getId());
-        // TODO: Add logic for shared lists access check
-        if (!isOwner) {
-            throw new ForbiddenException("You do not have permission to access this list.");
-        }
+       checkAccess(listId, currentUser);
 
         return shoppingListMapper.toDto(shoppingList, currentUser);
     }
@@ -102,5 +106,44 @@ public class ShoppingListService {
         if (!isOwner && !isCollaborator) {
             throw new ForbiddenException("You do not have permission to access this list.");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public ShoppingListDto.ShareTokenResponse getShareTokenForOwner(Long listId, User currentUser) {
+        ShoppingList shoppingList = shoppingListRepository.findById(listId)
+                .orElseThrow(() -> new ResourceNotFoundException("Shopping list not found with id: " + listId));
+
+        if (!shoppingList.getOwner().getId().equals(currentUser.getId())) {
+            throw new ForbiddenException("You do not have permission to get the share token for this list.");
+        }
+
+        String shareUrl = appBaseUrl + "/join/" + shoppingList.getShareToken();
+
+        return new ShoppingListDto.ShareTokenResponse(shoppingList.getShareToken(), shareUrl);
+    }
+
+    @Transactional
+    public ShoppingListDto.ShoppingListResponse joinSharedList(ShoppingListDto.JoinShoppingListRequest request, User currentUser) {
+        ShoppingList shoppingList = shoppingListRepository.findByShareToken(request.shareToken())
+                .orElseThrow(() -> new ResourceNotFoundException("Shopping list not found with the provided share token."));
+
+        if (shoppingList.getOwner().getId().equals(currentUser.getId())) {
+            throw new UserAlreadyHasAccessException("You are the owner of this list.");
+        }
+
+        boolean alreadyMember = shoppingListShareRepository.existsByShoppingListIdAndUserId(shoppingList.getId(), currentUser.getId());
+        if (alreadyMember) {
+            throw new UserAlreadyHasAccessException("You are already a member of this list.");
+        }
+
+        ShoppingListShare share = ShoppingListShare.builder()
+                .id(new ShoppingListShare.ShoppingListShareId(shoppingList.getId(), currentUser.getId()))
+                .shoppingList(shoppingList)
+                .user(currentUser)
+                .build();
+
+        shoppingListShareRepository.save(share);
+
+        return shoppingListMapper.toDto(shoppingList, currentUser);
     }
 }

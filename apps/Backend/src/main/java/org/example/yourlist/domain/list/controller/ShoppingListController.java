@@ -9,6 +9,7 @@ import org.example.yourlist.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,5 +50,24 @@ public class ShoppingListController {
             @AuthenticationPrincipal User currentUser
     ) {
         return shoppingListService.getShoppingListDetails(id, currentUser);
+    }
+
+    @GetMapping("/{id}/share")
+    @ResponseStatus(HttpStatus.OK)
+    public ShoppingListDto.ShareTokenResponse getShareToken(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return shoppingListService.getShareTokenForOwner(id, currentUser);
+    }
+
+    @PostMapping("/join")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("isAuthenticated()")
+    public ShoppingListDto.ShoppingListResponse joinSharedList(
+            @Valid @RequestBody ShoppingListDto.JoinShoppingListRequest request,
+            @AuthenticationPrincipal User currentUser
+    ) {
+        return shoppingListService.joinSharedList(request, currentUser);
     }
 }

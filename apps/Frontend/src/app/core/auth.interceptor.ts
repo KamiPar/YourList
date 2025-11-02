@@ -2,7 +2,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // TODO: Replace with your actual token
-  const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJrYW1pbC5wYXJ0eWthMTk5OEBnbWFpbC5jb20iLCJpYXQiOjE3NjE4NTU4OTgsImV4cCI6MTc2MTg1OTQ5OH0.x-QD4k9rjqjAPz4ojSqQghSbLDpAAS0WlrMkoLuTPhY';
+  const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJrYW1pbC5wYXJ0eWthQGdtYWlsLmNvbSIsImlhdCI6MTc2MjA4NjYxMywiZXhwIjoxNzYyMDkwMjEzfQ.bgwLKaoPntoCKwW5V_7HQNl9TurNf6s-XXrbasicAb4';
 
   // Clone the request and add the authorization header
   const authReq = req.clone({

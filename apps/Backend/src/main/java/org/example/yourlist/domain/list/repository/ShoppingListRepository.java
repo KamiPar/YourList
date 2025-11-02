@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface ShoppingListRepository extends JpaRepository<ShoppingList, Long> {
@@ -43,4 +44,6 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingList, Long
 
   @Query("SELECT sl FROM ShoppingList sl JOIN FETCH sl.owner LEFT JOIN FETCH sl.shares WHERE sl.id = :id")
   Optional<ShoppingList> findByIdWithOwnerAndShares(@Param("id") Long id);
+
+  Optional<ShoppingList> findByShareToken(UUID shareToken);
 }

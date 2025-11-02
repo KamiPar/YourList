@@ -10,12 +10,15 @@ import org.example.yourlist.domain.list.service.ShoppingListService;
 import org.example.yourlist.domain.user.entity.User;
 import org.example.yourlist.exception.ForbiddenException;
 import org.example.yourlist.exception.ResourceNotFoundException;
+import org.example.yourlist.websocket.WebSocketUpdateService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -40,6 +43,9 @@ class ItemServiceTest {
 
     @Mock
     private ShoppingListService shoppingListService;
+
+    @Mock
+    private WebSocketUpdateService webSocketUpdateService;
 
     @InjectMocks
     private ItemService itemService;
@@ -74,17 +80,19 @@ class ItemServiceTest {
 
     @Test
     void createItem_shouldCreateItem_whenUserIsOwner() {
-        when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
-        when(itemMapper.toEntity(createItemRequest)).thenReturn(item);
-        when(itemRepository.save(any(Item.class))).thenReturn(item);
-        when(itemMapper.toResponse(item)).thenReturn(itemResponse);
+        try (MockedStatic<TransactionSynchronizationManager> tsm = mockStatic(TransactionSynchronizationManager.class)) {
+            when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
+            when(itemMapper.toEntity(createItemRequest)).thenReturn(item);
+            when(itemRepository.save(any(Item.class))).thenReturn(item);
+            when(itemMapper.toResponse(item)).thenReturn(itemResponse);
 
-        ItemDto.ItemResponse result = itemService.createItem(1L, createItemRequest, listOwner);
+            ItemDto.ItemResponse result = itemService.createItem(1L, createItemRequest, listOwner);
 
-        assertNotNull(result);
-        assertEquals("Milk", result.name());
-        verify(shoppingListRepository, times(1)).findById(1L);
-        verify(itemRepository, times(1)).save(any(Item.class));
+            assertNotNull(result);
+            assertEquals("Milk", result.name());
+            verify(shoppingListRepository, times(1)).findById(1L);
+            verify(itemRepository, times(1)).save(any(Item.class));
+        }
     }
 
     @Test
@@ -110,22 +118,24 @@ class ItemServiceTest {
 
     @Test
     void updateItem_shouldUpdateItem_whenUserIsOwner() {
-        ItemDto.UpdateItemRequest updateRequest = new ItemDto.UpdateItemRequest("New Milk", "3L", true);
-        when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
-        when(itemRepository.findByIdAndShoppingListId(1L, 1L)).thenReturn(Optional.of(item));
-        when(itemRepository.save(any(Item.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(itemMapper.toResponse(any(Item.class))).thenAnswer(invocation -> {
-            Item savedItem = invocation.getArgument(0);
-            return new ItemDto.ItemResponse(savedItem.getId(), savedItem.getShoppingList().getId(), savedItem.getName(), savedItem.getDescription(), savedItem.getIsBought(), savedItem.getCreatedAt());
-        });
+        try (MockedStatic<TransactionSynchronizationManager> tsm = mockStatic(TransactionSynchronizationManager.class)) {
+            ItemDto.UpdateItemRequest updateRequest = new ItemDto.UpdateItemRequest("New Milk", "3L", true);
+            when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
+            when(itemRepository.findByIdAndShoppingListId(1L, 1L)).thenReturn(Optional.of(item));
+            when(itemRepository.save(any(Item.class))).thenAnswer(invocation -> invocation.getArgument(0));
+            when(itemMapper.toResponse(any(Item.class))).thenAnswer(invocation -> {
+                Item savedItem = invocation.getArgument(0);
+                return new ItemDto.ItemResponse(savedItem.getId(), savedItem.getShoppingList().getId(), savedItem.getName(), savedItem.getDescription(), savedItem.getIsBought(), savedItem.getCreatedAt());
+            });
 
-        ItemDto.ItemResponse result = itemService.updateItem(1L, 1L, updateRequest, listOwner);
+            ItemDto.ItemResponse result = itemService.updateItem(1L, 1L, updateRequest, listOwner);
 
-        assertNotNull(result);
-        assertEquals("New Milk", result.name());
-        assertEquals("3L", result.description());
-        assertTrue(result.isBought());
-        verify(itemRepository, times(1)).save(any(Item.class));
+            assertNotNull(result);
+            assertEquals("New Milk", result.name());
+            assertEquals("3L", result.description());
+            assertTrue(result.isBought());
+            verify(itemRepository, times(1)).save(any(Item.class));
+        }
     }
 
     @Test
@@ -155,13 +165,15 @@ class ItemServiceTest {
 
     @Test
     void deleteItem_shouldDeleteItem_whenUserIsOwner() {
-        when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
-        when(itemRepository.findByIdAndShoppingListId(1L, 1L)).thenReturn(Optional.of(item));
-        doNothing().when(itemRepository).delete(item);
+        try (MockedStatic<TransactionSynchronizationManager> tsm = mockStatic(TransactionSynchronizationManager.class)) {
+            when(shoppingListRepository.findById(1L)).thenReturn(Optional.of(shoppingList));
+            when(itemRepository.findByIdAndShoppingListId(1L, 1L)).thenReturn(Optional.of(item));
+            doNothing().when(itemRepository).delete(item);
 
-        assertDoesNotThrow(() -> itemService.deleteItem(1L, 1L, listOwner));
+            assertDoesNotThrow(() -> itemService.deleteItem(1L, 1L, listOwner));
 
-        verify(itemRepository, times(1)).delete(item);
+            verify(itemRepository, times(1)).delete(item);
+        }
     }
 
     @Test
