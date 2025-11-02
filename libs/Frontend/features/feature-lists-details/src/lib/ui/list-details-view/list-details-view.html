@@ -10,6 +10,7 @@
       @if(vm.listInfo) {
         <your-list-list-header [listName]="vm.listInfo.name"
                                [isOwner]="vm.listInfo.isOwner"
+                               (shareClicked)="onShareClicked()"
         />
       }
 

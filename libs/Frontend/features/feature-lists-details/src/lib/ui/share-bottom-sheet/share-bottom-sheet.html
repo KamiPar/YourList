@@ -1,0 +1,18 @@
+<div class="p-4 bg-white">
+  <h2 class="text-lg font-semibold mb-4">Udostępnij listę</h2>
+  <p class="text-sm text-gray-500 mb-2">
+    Każdy, kto ma ten token, będzie mógł dołączyć do Twojej listy i dodawać do niej produkty.
+  </p>
+  <div class="flex items-center gap-2">
+    <mat-form-field class="flex-grow">
+      <mat-label>Token do udostępnienia</mat-label>
+      <input matInput [value]="data.shareToken" readonly />
+    </mat-form-field>
+    <button mat-icon-button color="primary" (click)="onCopy()" aria-label="Kopiuj link">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+  </div>
+  <div class="flex justify-end mt-4">
+    <button mat-button (click)="onCancel($event)">Anuluj</button>
+  </div>
+</div>

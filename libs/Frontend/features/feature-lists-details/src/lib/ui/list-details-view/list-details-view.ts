@@ -5,6 +5,8 @@ import {
   inject,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { ShareBottomSheet } from '../share-bottom-sheet/share-bottom-sheet';
 
 
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -31,6 +33,7 @@ export class ListDetailsView {
   private listId = toSignal(
     this.activatedRoute.params.pipe(map((params) => params['id']))
   );
+  private bottomSheet = inject(MatBottomSheet);
 
   constructor() {
     effect(() => {
@@ -39,5 +42,15 @@ export class ListDetailsView {
         this.state.fetchData(Number(id));
       }
     });
+  }
+
+  public onShareClicked(): void {
+    const viewModel = this.state.viewModel();
+    if (viewModel?.listInfo?.shareToken) {
+      const shareToken = viewModel.listInfo.shareToken
+      this.bottomSheet.open(ShareBottomSheet, {
+        data: { shareToken },
+      });
+    }
   }
 }

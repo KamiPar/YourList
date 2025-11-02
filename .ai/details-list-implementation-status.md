@@ -14,4 +14,4 @@
 ## Kolejne kroki
 Zgodnie z pierwotnym planem implementacji, pozostały następujące kroki (które zostały pominięte na prośbę użytkownika w bieżącym zadaniu):
 - **Krok 8: Funkcjonalność udostępniania:** Implementacja `ShareBottomSheetComponent` i logiki jego otwierania w celu udostępniania listy.
-- **Krok 9: Polling (symulacja real-time):** Dodanie mechanizmu `setInterval` do okresowego odświeżania danych o produktach.
+- **Krok 9: Wykorzystanie zaimlpementowanego na backendzie WebSocketa oraz niezbędnych bibliotek frontendowych w celu implementacji aktualizacji widoku listy w czasie rzeczywistym wykorzystując między innymi aktualizacje stany 

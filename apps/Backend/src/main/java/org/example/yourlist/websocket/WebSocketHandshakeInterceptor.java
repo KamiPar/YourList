@@ -86,6 +86,7 @@ public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
     }
 
     private String extractToken(ServerHttpRequest request) {
+        // First, try to get token from Authorization header
         List<String> authHeaders = request.getHeaders().get("Authorization");
         if (authHeaders != null && !authHeaders.isEmpty()) {
             String authHeader = authHeaders.get(0);
@@ -93,6 +94,18 @@ public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
                 return authHeader.substring(7);
             }
         }
+
+        // If not found in header, try to get from query parameter
+        String query = request.getURI().getQuery();
+        if (query != null && query.contains("token=")) {
+            String[] params = query.split("&");
+            for (String param : params) {
+                if (param.startsWith("token=")) {
+                    return param.substring(6); // "token=".length() = 6
+                }
+            }
+        }
+
         return null;
     }
 

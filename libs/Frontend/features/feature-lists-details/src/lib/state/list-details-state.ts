@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, OnDestroy, signal } from '@angular/core';
 import {
   CreateItemRequest,
   ItemControllerRestService,
@@ -7,7 +7,9 @@ import {
   ShoppingListResponse,
   UpdateItemRequest,
 } from '@your-list/shared/data-access/data-access-api';
-import { forkJoin } from 'rxjs';
+import { forkJoin, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
+import { WebSocketService } from '../../../../../core/services/websocket.service';
 
 interface ListItem extends ItemResponse {
   isOptimistic?: boolean;
@@ -37,14 +39,14 @@ export interface ListDetailsViewModel {
   isEmpty: boolean;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ListDetailsState {
+@Injectable()
+export class ListDetailsState implements OnDestroy {
   private itemControllerRestService = inject(ItemControllerRestService);
   private shoppingListControllerRestService = inject(
     ShoppingListControllerRestService
   );
+  private webSocketService = inject(WebSocketService);
+  private destroy$ = new Subject<void>();
 
   // State Signals
   private list = signal<ShoppingListResponse | null>(null);
@@ -102,13 +104,14 @@ export class ListDetailsState {
     this.error.set(null);
 
     forkJoin({
-      list: this.shoppingListControllerRestService.getList( listId ),
-      items: this.itemControllerRestService.getAllItemsForList( listId ),
+      list: this.shoppingListControllerRestService.getList(listId),
+      items: this.itemControllerRestService.getAllItemsForList(listId),
     }).subscribe({
       next: ({ list, items }) => {
         this.list.set(list);
         this.items.set(items);
         this.isLoading.set(false);
+        this.setupWebSocket(listId);
       },
       error: (err) => {
         console.error(err);
@@ -209,5 +212,31 @@ export class ListDetailsState {
       isEditingDescription: false,
       isOptimistic: !!item.isOptimistic,
     };
+  }
+
+  private setupWebSocket(listId: number): void {
+    this.webSocketService.connect(listId);
+    this.webSocketService
+      .onUpdate()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.refreshItems();
+      });
+  }
+
+  private refreshItems(): void {
+    const listId = this.listId();
+    if (!listId) return;
+
+    this.itemControllerRestService.getAllItemsForList(listId).subscribe({
+      next: (items) => this.items.set(items),
+      error: (err) => console.error('Failed to refresh items', err),
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.webSocketService.disconnect();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
