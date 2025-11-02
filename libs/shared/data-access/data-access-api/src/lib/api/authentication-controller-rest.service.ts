@@ -17,6 +17,8 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
+import { ErrorResponse } from '../model/error-response.model';
+// @ts-ignore
 import { ProblemDetail } from '../model/problem-detail.model';
 // @ts-ignore
 import { User } from '../model/user.model';
@@ -48,10 +50,10 @@ export class AuthenticationControllerRestService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public authenticate(userLoginRequest: UserLoginRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json' | '*/*', context?: HttpContext, transferCache?: boolean}): Observable<UserLoginResponse>;
-    public authenticate(userLoginRequest: UserLoginRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json' | '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserLoginResponse>>;
-    public authenticate(userLoginRequest: UserLoginRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json' | '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserLoginResponse>>;
-    public authenticate(userLoginRequest: UserLoginRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json' | '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public authenticate(userLoginRequest: UserLoginRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<UserLoginResponse>;
+    public authenticate(userLoginRequest: UserLoginRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<UserLoginResponse>>;
+    public authenticate(userLoginRequest: UserLoginRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<UserLoginResponse>>;
+    public authenticate(userLoginRequest: UserLoginRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userLoginRequest === null || userLoginRequest === undefined) {
             throw new Error('Required parameter userLoginRequest was null or undefined when calling authenticate.');
         }
@@ -59,8 +61,8 @@ export class AuthenticationControllerRestService extends BaseService {
         let localVarHeaders = this.defaultHeaders;
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/problem+json',
-            '*/*'
+            '*/*',
+            'application/problem+json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
@@ -112,10 +114,10 @@ export class AuthenticationControllerRestService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public register(userRegistrationRequest: UserRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json' | '*/*', context?: HttpContext, transferCache?: boolean}): Observable<User>;
-    public register(userRegistrationRequest: UserRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json' | '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<User>>;
-    public register(userRegistrationRequest: UserRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/problem+json' | '*/*', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<User>>;
-    public register(userRegistrationRequest: UserRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/problem+json' | '*/*', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public register(userRegistrationRequest: UserRegistrationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<User>;
+    public register(userRegistrationRequest: UserRegistrationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<User>>;
+    public register(userRegistrationRequest: UserRegistrationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: '*/*' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<User>>;
+    public register(userRegistrationRequest: UserRegistrationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: '*/*' | 'application/problem+json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (userRegistrationRequest === null || userRegistrationRequest === undefined) {
             throw new Error('Required parameter userRegistrationRequest was null or undefined when calling register.');
         }
@@ -123,8 +125,8 @@ export class AuthenticationControllerRestService extends BaseService {
         let localVarHeaders = this.defaultHeaders;
 
         const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
-            'application/problem+json',
-            '*/*'
+            '*/*',
+            'application/problem+json'
         ]);
         if (localVarHttpHeaderAcceptSelected !== undefined) {
             localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);

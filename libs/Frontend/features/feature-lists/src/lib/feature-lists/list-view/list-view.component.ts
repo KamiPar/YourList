@@ -8,6 +8,7 @@ import { ShoppingListItem } from '../shopping-list-item/shopping-list-item';
 import { SkeletonLoaderComponent } from '@your-list/shared/ui';
 import { EmptyStateComponent } from '@your-list/shared/ui';
 import { ShoppingListControllerRestService, ShoppingListSummaryResponse, PageShoppingListSummaryResponse } from '@your-list/shared/data-access/data-access-api';
+import { JoinListModal } from '../join-list/join-list-modal';
 
 
 
@@ -15,7 +16,7 @@ export interface ShoppingListSummaryVm {
   id?: number;
   name?: string;
   isOwner?: boolean;
-  lastModified?: string; // TODO: Implement date formatting pipe/logic
+  lastModified?: string;
   itemCountLabel?: string;
   showDeleteButton?: boolean;
   isShared?: boolean;
@@ -97,6 +98,19 @@ export class ListViewComponent implements OnInit {
     });
   }
 
+  public openJoinListModal(): void {
+    const dialogRef = this.dialog.open(JoinListModal);
+
+    dialogRef.afterClosed().subscribe((result: ShoppingListSummaryResponse) => {
+      if (result) {
+        this.state.update((s) => ({
+          ...s,
+          lists: [result, ...s.lists],
+        }));
+      }
+    });
+  }
+
   public onNavigate(listId: number): void {
     this.router.navigate(['/lists', listId]);
   }
@@ -123,7 +137,9 @@ export class ListViewComponent implements OnInit {
       id: list.id,
       name: list.name,
       isOwner: list.isOwner,
-      lastModified: new Date(list.updatedAt).toLocaleDateString(),
+      lastModified: list.updatedAt
+        ? new Date(list.updatedAt).toLocaleDateString()
+        : '',
       itemCountLabel: `${list.itemCount} produktów (${list.boughtItemCount} kupione)`,
       showDeleteButton: list.isOwner,
       isShared: !list.isOwner,

@@ -39,7 +39,6 @@ Zakupy spożywcze realizowane równolegle przez dwóch lub więcej członków go
 ### 4.1. Funkcjonalności w zakresie MVP
 - Zapisywanie, odczytywanie, przeglądanie i usuwanie list zakupów.
 - Prosty system kont użytkowników (e-mail + hasło) do powiązania użytkownika z listami.
-- Tworzenie, edycja i odczyt listy zakupów dla użytkowników niezalogowanych (zapis w local storage).
 - Współdzielenie listy zakupów dla wielu zalogowanych użytkowników w czasie rzeczywistym.
 
 ### 4.2. Funkcjonalności poza zakresem MVP
@@ -49,6 +48,7 @@ Zakupy spożywcze realizowane równolegle przez dwóch lub więcej członków go
 - Zaawansowane zarządzanie użytkownikami na liście (np. usuwanie dostępu).
 - Informowanie o obecności innych użytkowników na liście w czasie rzeczywistym.
 - Wbudowany samouczek lub przewodnik po aplikacji.
+- Tworzenie, edycja i odczyt listy zakupów dla użytkowników niezalogowanych (zapis w local storage).
 
 ## 5. Historyjki użytkowników
 ### ID: US-001

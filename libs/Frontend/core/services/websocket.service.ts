@@ -10,7 +10,7 @@ export class WebSocketService {
 
   public connect(listId: number): void {
     const authToken =
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJrYW1pbC5wYXJ0eWthMTk5OEBnbWFpbC5jb20iLCJpYXQiOjE3NjIwOTQzNzgsImV4cCI6MTc2MjA5Nzk3OH0.Etu4gHV7D8BYdfGMWp0qIt9Tiwr3R6r6snT_bly4aN4';
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJrYW1pbC5wYXJ0eWthQGdtYWlsLmNvbSIsImlhdCI6MTc2MjA5NzgyOCwiZXhwIjoxNzYyMTAxNDI4fQ.fb3ZuaopoG-qyx2iY-tzXMCTZn_gK8CjxW0AQERFbIU';
 
     const wsUrl = `ws://localhost:8080/ws/lists/${listId}?token=${authToken}`;
 

@@ -1,1 +1,21 @@
-<p>join-list-modal works!</p>
+<h2 mat-dialog-title>Dołącz do listy</h2>
+<mat-dialog-content>
+  <form [formGroup]="joinListForm" (ngSubmit)="joinList()">
+    <mat-form-field class="w-full">
+      <mat-label>Token</mat-label>
+      <input matInput formControlName="shareToken" placeholder="Wklej token udostępniania" />
+      @if (joinListForm.get('shareToken')?.hasError('required')) {
+        <mat-error>Token jest wymagany.</mat-error>
+      }
+      @if (joinListForm.get('shareToken')?.hasError('invalidToken')) {
+        <mat-error>Nieprawidłowy token.</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Anuluj</button>
+  <button mat-raised-button color="primary" (click)="joinList()" [disabled]="joinListForm.invalid">
+    Dołącz
+  </button>
+</mat-dialog-actions>
