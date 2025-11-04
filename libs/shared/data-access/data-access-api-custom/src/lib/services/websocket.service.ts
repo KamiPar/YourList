@@ -1,16 +1,22 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { AuthStateService } from './auth-state.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WebSocketService {
+  private readonly authStateService = inject(AuthStateService);
   private ws: WebSocket | null = null;
   private updateSubject = new Subject<any>();
 
   public connect(listId: number): void {
-    const authToken =
-      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJrYW1pbC5wYXJ0eWthQGdtYWlsLmNvbSIsImlhdCI6MTc2MjA5NzgyOCwiZXhwIjoxNzYyMTAxNDI4fQ.fb3ZuaopoG-qyx2iY-tzXMCTZn_gK8CjxW0AQERFbIU';
+    const authToken = this.authStateService.getToken();
+
+    if (!authToken) {
+      console.error('Auth token is not available, WebSocket connection aborted.');
+      return;
+    }
 
     const wsUrl = `ws://localhost:8080/ws/lists/${listId}?token=${authToken}`;
 

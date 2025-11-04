@@ -24,17 +24,6 @@ Zakupy spożywcze realizowane równolegle przez dwóch lub więcej członków go
 - Zmiany statusu produktów (dodanie, oznaczenie jako kupiony) na współdzielonych listach są synchronizowane w czasie rzeczywistym.
 - Konflikty edycji rozwiązywane są metodą "ostatni zapis wygrywa" (last write wins).
 
-### 3.5. Tryb Użytkownika Niezalogowanego
-- Użytkownik niezalogowany może tworzyć, edytować i zarządzać jedną listą zakupów.
-- Lista użytkownika niezalogowanego jest przechowywana w local storage przeglądarki.
-- Po rejestracji lub zalogowaniu, system wykrywa lokalną listę i proponuje jej migrację na konto użytkownika.
-
-### 3.6. Tryb Offline
-- Aplikacja jest funkcjonalna bez aktywnego połączenia z internetem.
-- Użytkownik może dodawać produkty i oznaczać je jako kupione w trybie offline.
-- Zmiany są automatycznie synchronizowane z serwerem po odzyskaniu połączenia.
-- W interfejsie użytkownika widoczny jest dyskretny wskaźnik informujący o statusie offline.
-
 ## 4. Granice projektu
 ### 4.1. Funkcjonalności w zakresie MVP
 - Zapisywanie, odczytywanie, przeglądanie i usuwanie list zakupów.
@@ -49,6 +38,8 @@ Zakupy spożywcze realizowane równolegle przez dwóch lub więcej członków go
 - Informowanie o obecności innych użytkowników na liście w czasie rzeczywistym.
 - Wbudowany samouczek lub przewodnik po aplikacji.
 - Tworzenie, edycja i odczyt listy zakupów dla użytkowników niezalogowanych (zapis w local storage).
+- Tryb Użytkownika Niezalogowanego
+- Tryb Offline
 
 ## 5. Historyjki użytkowników
 ### ID: US-001

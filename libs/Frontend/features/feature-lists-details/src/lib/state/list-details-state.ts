@@ -9,7 +9,7 @@ import {
 } from '@your-list/shared/data-access/data-access-api';
 import { forkJoin, takeUntil } from 'rxjs';
 import { Subject } from 'rxjs';
-import { WebSocketService } from '../../../../../core/services/websocket.service';
+import { WebSocketService } from '@your-list/data-access-api-custom';
 
 interface ListItem extends ItemResponse {
   isOptimistic?: boolean;

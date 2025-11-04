@@ -1,10 +1,20 @@
 import { Route } from '@angular/router';
+import { AuthLayoutComponent } from '@your-list/shared/ui';
+
 
 export const appRoutes: Route[] = [
   {
+    path: 'auth',
+    component: AuthLayoutComponent,
+    loadChildren: () =>
+      import('@your-list/Frontend/features/feature-login').then(
+        (r) => r.authRoutes
+      ),
+  },
+  {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'lists',
+    redirectTo: 'auth',
   },
   {
     path: 'lists',

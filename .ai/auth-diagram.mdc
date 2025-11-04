@@ -1,0 +1,41 @@
+sequenceDiagram
+    actor User
+    participant Browser as "Przeglądarka (Angular App)"
+    participant Backend as "Backend (Spring Boot App)"
+
+    User->>Browser: Wprowadza e-mail i hasło w formularzu logowania
+    Browser->>Browser: Walidacja formularza po stronie klienta
+    User->>Browser: Klika przycisk "Zaloguj"
+
+    Browser->>Backend: POST /api/auth/login z UserLoginRequest (email, password)
+    activate Backend
+
+    Backend->>Backend: Walidacja DTO (UserLoginRequest)
+    alt Niepoprawne dane
+        Backend-->>Browser: Odpowiedź 400 Bad Request
+    end
+
+    Backend->>Backend: Uwierzytelnienie użytkownika (Spring Security - AuthenticationManager)
+    alt Błędne dane logowania
+        Backend-->>Browser: Odpowiedź 401 Unauthorized (InvalidCredentialsException)
+    end
+
+    Backend->>Backend: Wygenerowanie tokenu JWT (JwtService)
+    Backend-->>Browser: Odpowiedź 200 OK z UserLoginResponse (token)
+    deactivate Backend
+
+    Browser->>Browser: Zapisanie tokenu JWT w localStorage
+    Browser->>User: Przekierowanie do widoku "Moje listy"
+
+    Note over Browser, Backend: Dla kolejnych zapytań...
+
+    Browser->>Backend: Zapytanie do chronionego zasobu z nagłówkiem "Authorization: Bearer [JWT]"
+    activate Backend
+
+    Backend->>Backend: Walidacja tokenu JWT (JwtAuthenticationFilter)
+    alt Token nieprawidłowy/wygasł
+         Backend-->>Browser: Odpowiedź 401 Unauthorized
+    end
+    Backend->>Backend: Ustawienie kontekstu bezpieczeństwa (SecurityContextHolder)
+    Backend-->>Browser: Odpowiedź 200 OK z danymi zasobu
+    deactivate Backend

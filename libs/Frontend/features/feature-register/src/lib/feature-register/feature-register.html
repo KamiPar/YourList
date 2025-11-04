@@ -1,0 +1,66 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-center text-gray-900">Create an account</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="register()" class="space-y-6">
+      @if (errorMessage()) {
+        <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+          {{ errorMessage() }}
+        </div>
+      }
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+        <input id="username" type="text" formControlName="username"
+               class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Your username">
+        @if (registerForm.get('username')?.invalid && (registerForm.get('username')?.dirty || registerForm.get('username')?.touched)) {
+          <div class="text-red-600 text-sm mt-1">
+            @if (registerForm.get('username')?.errors?.['required']) {
+              <span>Username is required.</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+        <input id="email" type="email" formControlName="email"
+               class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="you@example.com">
+        @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)) {
+          <div class="text-red-600 text-sm mt-1">
+            @if (registerForm.get('email')?.errors?.['required']) {
+              <span>Email is required.</span>
+            }
+            @if (registerForm.get('email')?.errors?.['email']) {
+              <span>Please enter a valid email address.</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <input id="password" type="password" formControlName="password"
+               class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+               placeholder="Password">
+        @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)) {
+          <div class="text-red-600 text-sm mt-1">
+            @if (registerForm.get('password')?.errors?.['required']) {
+              <span>Password is required.</span>
+            }
+            @if (registerForm.get('password')?.errors?.['minlength']) {
+              <span>Password must be at least 6 characters long.</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="submit" [disabled]="registerForm.invalid"
+                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-300">
+          Sign up
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

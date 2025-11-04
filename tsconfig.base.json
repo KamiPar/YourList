@@ -21,6 +21,15 @@
       "@your-list/Frontend/features/feature-lists-details": [
         "libs/Frontend/features/feature-lists-details/src/index.ts"
       ],
+      "@your-list/Frontend/features/feature-login": [
+        "libs/Frontend/features/feature-login/src/index.ts"
+      ],
+      "@your-list/Frontend/features/feature-register": [
+        "libs/Frontend/features/feature-register/src/index.ts"
+      ],
+      "@your-list/data-access-api-custom": [
+        "libs/shared/data-access/data-access-api-custom/src/index.ts"
+      ],
       "@your-list/shared/data-access/data-access-api": [
         "libs/shared/data-access/data-access-api/src/lib/index.ts"
       ],
