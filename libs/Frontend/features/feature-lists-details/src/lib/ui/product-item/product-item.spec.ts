@@ -12,6 +12,7 @@ describe('ProductItem', () => {
 
     fixture = TestBed.createComponent(ProductItem);
     component = fixture.componentInstance;
+    component.item = { id: 1, name: 'Test Item', isBought: false };
     fixture.detectChanges();
   });
 

@@ -1,6 +1,6 @@
 export default {
   displayName: 'feature-lists',
-  preset: '../../../jest.preset.js',
+  preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../../coverage/libs/Frontend/features/feature-lists',
   transform: {
@@ -13,6 +13,10 @@ export default {
     ],
   },
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
+  moduleNameMapper: {
+    '^@angular/animations/browser$': '<rootDir>/../../../../node_modules/@angular/animations/fesm2022/browser.mjs',
+    '^@your-list/(.*)$': '<rootDir>/../../../../libs/$1/src/index.ts'
+  },
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

@@ -10,3 +10,11 @@ Frontend:
 - Typescript (~5.9.2)
 - Nx 21.6.4
 - Angular Material 20
+
+Testy
+Testy jednostkowe:
+- Backend: JUnit 5, Mockito, Spring Test
+- Frontend: Jest, Angular Testing Library
+
+Testy E2E:
+- Playwright

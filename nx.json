@@ -79,6 +79,12 @@
         "classesTargetName": "classes",
         "buildTargetName": "build"
       }
+    },
+    {
+      "plugin": "@nx/playwright/plugin",
+      "options": {
+        "targetName": "e2e"
+      }
     }
   ]
 }

@@ -7,7 +7,7 @@ import { CreateListModal } from '../create-list/create-list-modal';
 import { ShoppingListItem } from '../shopping-list-item/shopping-list-item';
 import { SkeletonLoaderComponent } from '@your-list/shared/ui';
 import { EmptyStateComponent } from '@your-list/shared/ui';
-import { ShoppingListControllerRestService, ShoppingListSummaryResponse, PageShoppingListSummaryResponse } from '@your-list/shared/data-access/data-access-api';
+import { ShoppingListControllerRestService, ShoppingListSummaryResponse, PageShoppingListSummaryResponse } from "@your-list/shared/data-access/data-access-api";
 import { JoinListModal } from '../join-list/join-list-modal';
 
 
@@ -113,23 +113,6 @@ export class ListViewComponent implements OnInit {
 
   public onNavigate(listId: number): void {
     this.router.navigate(['/lists', listId]);
-  }
-
-  public onDelete(listId: number): void {
-    // if (confirm('Czy na pewno chcesz usunąć tę listę?')) {
-    //   this.shoppingListControllerRestService.deleteList(listId).subscribe({
-    //     next: () => {
-    //       this.state.update((s) => ({
-    //         ...s,
-    //         lists: s.lists.filter((list) => list.id !== listId),
-    //       }));
-    //     },
-    //     error: (err) => {
-    //       // TODO: Handle error (e.g., show a toast message)
-    //       console.error('Error deleting list:', err);
-    //     },
-    //   });
-    // }
   }
 
   private mapToVm(list: ShoppingListSummaryResponse): ShoppingListSummaryVm {
