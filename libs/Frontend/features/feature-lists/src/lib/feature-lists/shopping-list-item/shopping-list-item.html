@@ -1,12 +1,12 @@
 <div
   (click)="onNavigate()"
+  data-testid="shopping-list-item"
   class="block p-4 bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 cursor-pointer transition-colors duration-200"
 >
   <div class="flex justify-between items-start">
-    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900">{{ list().name }}</h5>
+    <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900" data-testid="shopping-list-name">{{ list().name }}</h5>
     @if (list().isShared) {
       <span title="Lista udostępniona">
-        <!-- Heroicon: users -->
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M15 21a6 6 0 00-9-5.197m0 0A5.975 5.975 0 0112 13a5.975 5.975 0 013-1.197M15 21a9 9 0 00-9-9" />
         </svg>
