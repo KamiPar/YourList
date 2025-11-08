@@ -111,13 +111,14 @@ class ShoppingListServiceTest {
                 .id(listId)
                 .name("My List")
                 .owner(owner)
+                .shares(new java.util.HashSet<>())
                 .build();
 
         ShoppingListDto.ShoppingListResponse expectedResponse = new ShoppingListDto.ShoppingListResponse(
                 listId, "My List", owner.getId(), true, UUID.randomUUID(), null, null
         );
 
-        when(shoppingListRepository.findByIdWithOwner(listId)).thenReturn(Optional.of(shoppingList));
+        when(shoppingListRepository.findByIdWithOwnerAndShares(listId)).thenReturn(Optional.of(shoppingList));
         when(shoppingListMapper.toDto(shoppingList, owner)).thenReturn(expectedResponse);
 
         // When
@@ -137,7 +138,7 @@ class ShoppingListServiceTest {
         User currentUser = new User();
         currentUser.setId(1L);
 
-        when(shoppingListRepository.findByIdWithOwner(listId)).thenReturn(Optional.empty());
+        when(shoppingListRepository.findByIdWithOwnerAndShares(listId)).thenReturn(Optional.empty());
 
         // When & Then
         assertThrows(ResourceNotFoundException.class, () -> shoppingListService.getShoppingListDetails(listId, currentUser));
@@ -157,9 +158,10 @@ class ShoppingListServiceTest {
                 .id(listId)
                 .name("Owner's List")
                 .owner(owner)
+                .shares(new java.util.HashSet<>())
                 .build();
 
-        when(shoppingListRepository.findByIdWithOwner(listId)).thenReturn(Optional.of(shoppingList));
+        when(shoppingListRepository.findByIdWithOwnerAndShares(listId)).thenReturn(Optional.of(shoppingList));
 
         // When & Then
         assertThrows(ForbiddenException.class, () -> shoppingListService.getShoppingListDetails(listId, anotherUser));
