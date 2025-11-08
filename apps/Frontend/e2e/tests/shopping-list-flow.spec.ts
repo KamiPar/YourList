@@ -30,7 +30,6 @@ test.describe('Shopping List Flow', () => {
 
     // Check if there are existing lists
     const listsCount = await listsPage.getListsCount();
-    console.log(`Found ${listsCount} existing lists`);
 
     // 3. Create new list
     await listsPage.clickCreateList();
