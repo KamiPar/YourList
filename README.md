@@ -1,101 +1,112 @@
 # YourList
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+YourList is an intelligent shopping list web application designed to streamline the grocery shopping process for families and housemates. The primary goal is to eliminate the problem of duplicate purchases by enabling shared lists and real-time synchronization of changes.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Table of Contents
+1. [Project Description](#project-description)
+2. [Tech Stack](#tech-stack)
+3. [Getting Started Locally](#getting-started-locally)
+4. [Available Scripts](#available-scripts)
+5. [Project Scope](#project-scope)
+6. [Project Status](#project-status)
+7. [License](#license)
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Project Description
 
-## Run tasks
+Parallel grocery shopping by multiple household members often leads to inefficiency, frustration, and wasted money from buying the same items twice. YourList solves this by providing a simple, intuitive platform for real-time list collaboration. Users can create, manage, and share shopping lists, with all changes instantly synced across devices, ensuring everyone is always on the same page.
 
-To run the dev server for your app, use:
+## Tech Stack
 
-```sh
-npx nx serve Frontend
-```
+### Backend
+- **Framework**: Spring Boot 3.5.6
+- **Language**: Java 17
+- **Database**: PostgreSQL
+- **Data Access**: Spring Data JPA
+- **Migrations**: Flyway
+- **API Documentation**: SpringDoc (OpenAPI)
+- **Real-time**: Spring WebSocket
+- **Security**: Spring Security, JWT
 
-To create a production bundle:
+### Frontend
+- **Framework**: Angular 20.3.5
+- **Language**: TypeScript ~5.9.2
+- **Styling**: TailwindCSS
+- **UI Components**: Angular Material
+- **Monorepo Tool**: Nx 21.6.4
 
-```sh
-npx nx build Frontend
-```
+### Testing
+- **Unit Testing (Backend)**: JUnit 5, Mockito, Spring Test
+- **Unit Testing (Frontend)**: Jest, Angular Testing Library
+- **E2E Testing**: Playwright
 
-To see all available targets to run for a project, run:
+## Getting Started Locally
 
-```sh
-npx nx show project Frontend
-```
+To set up and run the project on your local machine, follow these steps.
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+### Prerequisites
+- JDK 17
+- Node.js (LTS version recommended)
+- npm package manager
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Installation & Setup
 
-## Add new projects
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/KamiPar/YourList.git
+    cd YourList
+    ```
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+2.  **Install frontend dependencies:**
+    ```bash
+    npm install
+    ```
 
-Use the plugin's generator to create new projects.
+3.  **Run the Backend Application:**
+    The backend is a Spring Boot application. You can run it using the Gradle wrapper.
+    ```bash
+    # In the root directory
+    ./apps/Backend/gradlew -p apps/Backend bootRun
+    ```
+    The backend server will start on `http://localhost:8080`.
 
-To generate a new application, use:
+4.  **Run the Frontend Application:**
+    The frontend is managed by Nx. Run the following command from the root directory:
+    ```bash
+    npx nx serve Frontend
+    ```
+    The frontend development server will be available at `http://localhost:4200`.
 
-```sh
-npx nx g @nx/angular:app demo
-```
+## Available Scripts
 
-To generate a new library, use:
+The following scripts are available in the root `package.json`:
 
-```sh
-npx nx g @nx/angular:lib mylib
-```
+-   `npm run openapi:fetch`
+    Fetches the OpenAPI 3.0 specification from a running backend instance (at `http://localhost:8080/v3/api-docs`) and saves it locally.
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+-   `npm run openapi:generate`
+    Generates the frontend API client service based on the fetched OpenAPI specification using `openapi-generator-cli`.
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Project Scope
 
-## Set up CI!
+### Key Features (MVP)
+-   **User Accounts**: Secure user registration, login, and account deletion.
+-   **List Management**: Full CRUD (Create, Read, Update, Delete) functionality for shopping lists.
+-   **Product Management**: Add products with optional descriptions, and mark/unmark them as purchased.
+-   **Real-time Collaboration**: Share lists with other registered users via a unique link and see all changes synchronized in real-time.
+-   **Unified View**: See all personal and shared lists in a single "My Lists" view.
 
-### Step 1
+### Out of Scope for MVP
+-   Sharing lists with unauthenticated (guest) users.
+-   Creating shopping lists from recipes.
+-   Import/Export functionality for lists.
+-   Advanced user management on shared lists (e.g., revoking access).
+-   Real-time indicators for other users currently viewing a list.
+-   Offline mode.
 
-To connect to Nx Cloud, run the following command:
+## Project Status
+**In Development**
 
-```sh
-npx nx connect
-```
+This project is currently under active development. New features and improvements are being implemented.
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## License
+This project is distributed under the MIT License. See the `LICENSE` file for more information.
