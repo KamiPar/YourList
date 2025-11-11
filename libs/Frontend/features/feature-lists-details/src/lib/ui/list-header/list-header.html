@@ -1,11 +1,11 @@
 <header class="flex items-center justify-between p-4 border-b">
   <button [routerLink]="['/lists']">
-    &larr; Back
+    &larr; Wstecz
   </button>
   <h1 class="text-2xl font-bold">{{ listName }}</h1>
   @if (isOwner) {
     <button (click)="shareClicked.emit()">
-      Share
+      Udostępnij
     </button>
   }
 </header>
